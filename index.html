@@ -524,11 +524,10 @@
         <!-- Section header -->
         <div class="dashboard__head">
           <span class="dashboard__index">Dashboard</span>
-          <!-- Placeholder title — rename to your real (client-agnostic) report name. -->
-          <h2 id="dash-1-title">Sales Performance</h2>
+          <h2 id="dash-1-title">Sales KPI &amp; Analytics</h2>
           <p class="dashboard__tagline">
-            Revenue, margin, and volume tracked against target across regions and time &mdash;
-            built for a weekly commercial review.
+            A monthly scorecard tracking revenue, orders, and channel mix against YTD goal &mdash;
+            each KPI carried with MoM / QoQ / YoY variance and an at-a-glance status flag.
           </p>
         </div>
 
@@ -576,21 +575,21 @@
             <!-- STACK: the tools, by generic product name only. -->
             <div class="spec__row">
               <dt>Stack</dt>
-              <dd>Power BI &middot; SQL Server &middot; DAX</dd>
+              <dd>Power BI &middot; DAX</dd>
             </div>
             <!-- GRAIN: one sentence describing one row of the fact table. -->
             <div class="spec__row">
               <dt>Grain</dt>
-              <dd>1 row / order line / day</dd>
+              <dd>1 row / KPI / month</dd>
             </div>
             <!-- PATTERN: the core idea, emphasized — this is the line clients remember. -->
             <div class="spec__row">
               <dt>Pattern</dt>
-              <dd><strong>Star schema + time-intelligence measures</strong></dd>
+              <dd><strong>KPI-vs-goal scorecard + MoM/QoQ/YoY time-intelligence</strong></dd>
             </div>
             <div class="spec__row">
               <dt>Refresh</dt>
-              <dd>Scheduled daily</dd>
+              <dd>Scheduled monthly</dd>
             </div>
           </dl>
 
@@ -599,25 +598,27 @@
             <div class="writeup__block">
               <h3>The business problem</h3>
               <p>
-                Commercial reviews ran off static exports that were a week stale and impossible to
-                slice. The team needed one self-serve view of revenue vs. target they could filter by
-                region and period on the fly.
+                Leadership tracked KPIs across scattered spreadsheets, so &ldquo;are we on goal?&rdquo;
+                took a day to answer and never agreed month to month. They needed one scorecard where
+                every KPI sits next to its YTD target with the trend that explains it.
               </p>
             </div>
             <div class="writeup__block">
               <h3>The model design</h3>
               <p>
-                A star schema with a single sales fact and conformed Date, Region, and Product
-                dimensions. A dedicated date table is the backbone &mdash; it's what makes the
-                time-intelligence reliable instead of fragile.
+                A fact table of monthly KPI actuals joins a separate goals table on KPI &amp; period,
+                against a dedicated date table. Keeping targets out of the fact means goals can be
+                re-set without touching a single actual &mdash; and the date table keeps the
+                time-intelligence honest.
               </p>
             </div>
             <div class="writeup__block">
               <h3>The DAX pattern</h3>
               <p>
-                Base measures (<code>Revenue</code>, <code>Margin&nbsp;%</code>) are wrapped in
-                time-intelligence with <code>SAMEPERIODLASTYEAR</code> for YoY and a running
-                <code>TOTALYTD</code>, so every visual reuses one tested set of measures.
+                One base measure per KPI, wrapped once in variance logic &mdash;
+                <code>DATEADD</code> drives MoM and QoQ, <code>SAMEPERIODLASTYEAR</code> drives YoY.
+                A <code>SWITCH</code> over actual-vs-goal returns the status flag, so every row scores
+                itself from the same tested measures.
               </p>
             </div>
           </div>
