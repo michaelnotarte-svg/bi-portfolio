@@ -539,10 +539,10 @@
         <div class="dashboard__grid">
 
           <!-- ===================== EMBED =====================
-               This report's canvas is portrait (800 × 836), so the box matches
-               that ratio instead of the default 16:9 — otherwise the report
-               would shrink to a thin strip with wide empty margins. -->
-          <div class="embed" style="--embed-ratio: 800 / 836;">
+               Uses the default 16:9 box (the report's page canvas is 16:9).
+               If a future report has a genuinely different canvas shape, override
+               per-section with e.g. style="--embed-ratio: 4 / 3;". -->
+          <div class="embed">
             <!-- Empty-state: shows until a real https:// report is pasted in. -->
             <div class="embed__placeholder" aria-hidden="true">
               <p class="embed__placeholder-title">Paste your embed code here</p>
