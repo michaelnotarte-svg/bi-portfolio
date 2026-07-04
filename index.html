@@ -291,7 +291,10 @@
        show through — so the empty-state works with zero JavaScript. */
     .embed {
       position: relative;
-      aspect-ratio: 16 / 9;
+      /* Default 16:9, but any section can override per-report by setting
+         --embed-ratio inline (e.g. a portrait report → --embed-ratio: 800 / 836).
+         Custom-property-with-fallback keeps one rule flexible without extra classes. */
+      aspect-ratio: var(--embed-ratio, 16 / 9);
       background: var(--surface);
       border: 1px solid var(--line-strong);
       border-radius: var(--radius);
@@ -499,10 +502,10 @@
       <!-- A measurement-style strip: quiet mono facts under a hairline rule. -->
       <div class="hero__rule">
         <div class="hero__facts">
-          <span><b>Ingest</b> REST APIs &middot; SharePoint &middot; Google Sheets (GCP API)</span>
-          <span><b>Pipeline</b> ELT &rarr; SQL upserts on a medallion architecture &middot; Microsoft Fabric</span>
-          <span><b>Model</b> star schema &middot; DAX time-intelligence</span>
-          <span><b>Deliver</b> Power BI publish-to-web</span>
+          <span><b>Ingest</b> Google/Meta Ads &middot; Shopify &middot; Amazon &middot; Klaviyo &middot; Google Sheets &middot; SharePoint</span>
+          <span><b>Orchestrate</b> Databricks notebooks &middot; n8n &middot; Power Automate</span>
+          <span><b>Pipeline</b> ELT to a medallion architecture &middot; SQL upserts &middot; Databricks &amp; Microsoft Fabric</span>
+          <span><b>Model &amp; deliver</b> star schema &middot; DAX time-intelligence &middot; Power BI</span>
         </div>
       </div>
     </div>
@@ -535,8 +538,11 @@
 
         <div class="dashboard__grid">
 
-          <!-- ===================== EMBED ===================== -->
-          <div class="embed">
+          <!-- ===================== EMBED =====================
+               This report's canvas is portrait (800 × 836), so the box matches
+               that ratio instead of the default 16:9 — otherwise the report
+               would shrink to a thin strip with wide empty margins. -->
+          <div class="embed" style="--embed-ratio: 800 / 836;">
             <!-- Empty-state: shows until a real https:// report is pasted in. -->
             <div class="embed__placeholder" aria-hidden="true">
               <p class="embed__placeholder-title">Paste your embed code here</p>
@@ -553,7 +559,7 @@
             <iframe
               class="embed__frame"
               title="Financial Performance"
-              src=""
+              src="https://app.powerbi.com/view?r=eyJrIjoiNTdlZjlkYTgtYWM2ZS00MWU0LThjYmItNmZiMTNkMDYxMjgxIiwidCI6IjY3NzYxZTEwLTVjZWEtNDM0OS04ZmQwLTUwMDljZmYxZjM3MiIsImMiOjEwfQ%3D%3D&amp;pageName=5553169599588b83ab39"
               allowfullscreen
             ></iframe>
             <!-- ▲▲▲  END PASTE AREA  ▲▲▲ -->
