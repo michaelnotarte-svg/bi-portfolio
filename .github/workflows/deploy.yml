@@ -1,0 +1,48 @@
+name: Deploy static site to GitHub Pages
+
+# When to run:
+on:
+  # …on every push to main (auto-publish your changes)
+  push:
+    branches: [main]
+  # …and on demand, via the "Run workflow" button in the Actions tab.
+  # This is the manual re-trigger you were missing with the auto branch-deploy.
+  workflow_dispatch:
+
+# Least-privilege token: exactly the scopes the Pages deploy needs, nothing more.
+permissions:
+  contents: read   # to check out the repo
+  pages: write     # to publish to Pages
+  id-token: write  # OIDC token the deploy step uses to auth to Pages
+
+# Serialize deploys: one at a time, and let an in-flight deploy finish
+# rather than cancelling it (avoids half-published states).
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Binds this job to the github-pages environment and surfaces the live URL
+    # on the run summary once it deploys.
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Publish the repo root as-is — index.html is served directly,
+          # no build step. (README/.gitignore ride along harmlessly.)
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
