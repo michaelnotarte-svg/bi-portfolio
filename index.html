@@ -499,9 +499,10 @@
       <!-- A measurement-style strip: quiet mono facts under a hairline rule. -->
       <div class="hero__rule">
         <div class="hero__facts">
-          <span><b>Modeling</b> star schema &middot; DAX time-intelligence</span>
-          <span><b>Pipelines</b> SQL &middot; Databricks &middot; dbt</span>
-          <span><b>Delivery</b> Power BI publish-to-web</span>
+          <span><b>Ingest</b> REST APIs &middot; SharePoint &middot; Google Sheets (GCP API)</span>
+          <span><b>Pipeline</b> ELT &rarr; SQL upserts on a medallion architecture &middot; Microsoft Fabric</span>
+          <span><b>Model</b> star schema &middot; DAX time-intelligence</span>
+          <span><b>Deliver</b> Power BI publish-to-web</span>
         </div>
       </div>
     </div>
@@ -518,13 +519,112 @@
            3. Swap the <iframe> (see the PASTE marker), rename the <h2>,
               and edit the spec rows + the three write-up blocks.
          ==================================================================== -->
+    <!-- ==================== DASHBOARD 01 — Financial Performance ==================== -->
     <section class="dashboard" aria-labelledby="dash-1-title">
       <div class="wrap">
 
         <!-- Section header -->
         <div class="dashboard__head">
           <span class="dashboard__index">Dashboard</span>
-          <h2 id="dash-1-title">Sales KPI &amp; Analytics</h2>
+          <h2 id="dash-1-title">Financial Performance</h2>
+          <p class="dashboard__tagline">
+            A synthetic marketing-agency P&amp;L read from three angles &mdash; company profitability,
+            who owes what (AR / AP aging &amp; DSO), and which campaigns and clients actually make money.
+          </p>
+        </div>
+
+        <div class="dashboard__grid">
+
+          <!-- ===================== EMBED ===================== -->
+          <div class="embed">
+            <!-- Empty-state: shows until a real https:// report is pasted in. -->
+            <div class="embed__placeholder" aria-hidden="true">
+              <p class="embed__placeholder-title">Paste your embed code here</p>
+              <p class="embed__placeholder-hint">
+                Power BI &rarr; File &rarr; Embed report &rarr; Publish to web (public)
+              </p>
+            </div>
+
+            <!--
+              ▼▼▼  PASTE YOUR PUBLISH-TO-WEB IFRAME HERE  ▼▼▼
+              Paste Power BI's src URL into src="" below. Keep class="embed__frame",
+              the title=, https:// only, and allowfullscreen.
+            -->
+            <iframe
+              class="embed__frame"
+              title="Financial Performance"
+              src=""
+              allowfullscreen
+            ></iframe>
+            <!-- ▲▲▲  END PASTE AREA  ▲▲▲ -->
+          </div>
+
+          <!-- ===================== SPEC STRIP ===================== -->
+          <dl class="spec" aria-label="Technical specification">
+            <div class="spec__head">
+              <span>Spec</span>
+              <span>v1</span>
+            </div>
+            <div class="spec__row">
+              <dt>Stack</dt>
+              <dd>Power BI &middot; Power Query &middot; DAX</dd>
+            </div>
+            <div class="spec__row">
+              <dt>Grain</dt>
+              <dd>1 row / invoice line &middot; bill &middot; payment</dd>
+            </div>
+            <div class="spec__row">
+              <dt>Pattern</dt>
+              <dd><strong>Star schema + invoice bridge + snapshot-safe AR/AP</strong></dd>
+            </div>
+            <div class="spec__row">
+              <dt>Refresh</dt>
+              <dd>Static snapshot (synthetic)</dd>
+            </div>
+          </dl>
+
+          <!-- ===================== WRITE-UP ===================== -->
+          <div class="writeup">
+            <div class="writeup__block">
+              <h3>The business problem</h3>
+              <p>
+                An owner needed three answers on demand &mdash; are we profitable, who&rsquo;s overdue
+                on paying us, and which campaigns are actually worth doing &mdash; without rebuilding a
+                spreadsheet formula every time the question changed.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>The model design</h3>
+              <p>
+                A six-fact star schema. The key call: <code>InvoiceID</code> is unique in neither the
+                invoice-line fact nor the partial-payments fact, so a Power Query <strong>bridge
+                table</strong> (one row per invoice) sits between them instead of a broken
+                many-to-many. A single <code>dim_date</code> is marked as the official date table.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>The DAX pattern</h3>
+              <p>
+                Open AR / AP are snapshot cards wrapped in
+                <code>CALCULATE(&hellip;, ALL(dim_date))</code> &mdash; so a Year slicer can&rsquo;t
+                silently break a balance whose payments live in an unrelated fact. A <code>TOPN</code>
+                inside <code>ALL()</code> surfaces the top campaign type even under other filters.
+              </p>
+            </div>
+          </div>
+
+        </div><!-- /.dashboard__grid -->
+      </div>
+    </section>
+
+    <!-- ==================== DASHBOARD 02 — Sales KPI & Analytics ==================== -->
+    <section class="dashboard" aria-labelledby="dash-2-title">
+      <div class="wrap">
+
+        <!-- Section header -->
+        <div class="dashboard__head">
+          <span class="dashboard__index">Dashboard</span>
+          <h2 id="dash-2-title">Sales KPI &amp; Analytics</h2>
           <p class="dashboard__tagline">
             A monthly scorecard tracking revenue, orders, and channel mix against YTD goal &mdash;
             each KPI carried with MoM / QoQ / YoY variance and an at-a-glance status flag.
