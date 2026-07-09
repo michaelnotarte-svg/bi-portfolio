@@ -436,6 +436,99 @@
     }
 
     /* ============================================================
+       7b. PIPELINE FLOW  (image-based unit: a real n8n canvas
+       screenshot is the hero visual, annotated with a monospace
+       stage-line legend + a spec strip. Used for orchestration work
+       that isn't a Publish-to-web report.)
+       ============================================================ */
+    .flow + .flow {
+      /* Separate stacked pipelines with a hairline + generous space. */
+      margin-top: var(--space-16);
+      padding-top: var(--space-16);
+      border-top: 1px solid var(--line);
+    }
+    .flow__head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-4);
+      margin-bottom: var(--space-3);
+    }
+    .flow__tag {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: var(--ink);
+    }
+    .flow__zoom { font-family: var(--font-mono); font-size: 0.74rem; white-space: nowrap; }
+
+    /* The screenshot frame. It's dark to match the n8n canvas, so the
+       letterbox left by object-fit:contain blends into the image.
+       aspect-ratio reserves the ~3:1 space before the PNG loads,
+       so the page doesn't jump. */
+    .flow__frame {
+      position: relative;
+      aspect-ratio: 1580 / 520;   /* the screenshots' native shape */
+      background: #14151b;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .flow__frame a { position: absolute; inset: 0; z-index: 1; display: block; }
+    .flow__frame img {
+      width: 100%; height: 100%;
+      object-fit: contain;         /* show the whole wide canvas, never crop */
+    }
+    /* Empty-state: visible until the PNG is saved next to index.html.
+       The <img> onerror handler adds .is-empty (progressive enhancement),
+       so a missing file shows this hint instead of a broken-image icon. */
+    .flow__placeholder {
+      position: absolute; inset: 0; z-index: 0;
+      display: none;  /* shown only in the empty-state (see .is-empty below) */
+      place-content: center; gap: var(--space-2);
+      text-align: center; padding: var(--space-6);
+      font-family: var(--font-mono); font-size: 0.8rem; color: #8b93a1;
+      background: repeating-linear-gradient(-45deg, transparent 0 11px, rgba(255,255,255,0.035) 11px 12px);
+    }
+    /* Missing PNG → onerror adds .is-empty: hide the broken link, show the hint.
+       A successfully loaded image leaves the placeholder hidden, so it can't
+       peek through any object-fit letterbox. */
+    .flow__frame.is-empty a { display: none; }
+    .flow__frame.is-empty .flow__placeholder { display: grid; }
+
+    /* The monospace stage-line: the human-readable legend for the canvas,
+       since node labels in the screenshot are tiny. */
+    .flow__stages {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: var(--ink-muted);
+      margin-top: var(--space-4);
+    }
+    .flow__stages b { color: var(--ink); font-weight: 500; }
+    .flow__stages .arrow { color: var(--cobalt); padding: 0 0.1em; }
+
+    /* Meta row under the flow: prose note (left) + spec strip (right). */
+    .flow__meta {
+      display: grid;
+      gap: var(--space-6);
+      grid-template-columns: 1fr;
+      margin-top: var(--space-6);
+    }
+    @media (min-width: 60rem) {
+      .flow__meta {
+        grid-template-columns: minmax(0, 1fr) 19rem;
+        column-gap: var(--space-8);
+        align-items: start;
+      }
+    }
+    .flow__meta .spec { position: static; }  /* no sticky in this context */
+    /* Reuse .writeup/.writeup__block styling, but force a single column
+       (higher specificity than the .writeup 3-col media rule). */
+    .writeup.flow__note { grid-template-columns: 1fr; gap: var(--space-6); }
+
+    /* ============================================================
        8. FOOTER
        ============================================================ */
     .site-footer {
@@ -733,6 +826,145 @@
       </div>
     </section>
     <!-- ==================== END DASHBOARD SECTION (duplicate me) ==================== -->
+
+    <!-- ==================== DASHBOARD 03 — Pipeline Orchestration ====================
+         Image-based section: real n8n canvas screenshots as the hero visual.
+         SAVE THE TWO PNGs (client-agnostic crops) at these exact paths:
+           assets/n8n/amazon-sales-traffic.png
+           assets/n8n/shopify-daily-sales.png
+         Until they exist, each frame shows a "save it here" empty-state.
+         ============================================================== -->
+    <section class="dashboard" aria-labelledby="dash-3-title">
+      <div class="wrap">
+
+        <div class="dashboard__head">
+          <span class="dashboard__index">Pipeline</span>
+          <h2 id="dash-3-title">Pipeline Orchestration</h2>
+          <p class="dashboard__tagline">
+            The n8n workflows that keep the reporting layer fed &mdash; scheduled, self-healing
+            extractions from marketing &amp; e-commerce APIs into the tables behind the dashboards above.
+          </p>
+        </div>
+
+        <!-- ---------- Pipeline A: Amazon SP-API ---------- -->
+        <article class="flow">
+          <div class="flow__head">
+            <span class="flow__tag">Amazon SP-API &rarr; Google Sheets</span>
+            <a class="flow__zoom" href="assets/n8n/amazon-sales-traffic.png" target="_blank" rel="noopener">Enlarge &nearr;</a>
+          </div>
+          <!-- <figure> = self-contained illustrative content; <figcaption> names it. -->
+          <figure class="flow__frame">
+            <figcaption class="flow__placeholder">
+              Save the screenshot to<br />assets/n8n/amazon-sales-traffic.png
+            </figcaption>
+            <a href="assets/n8n/amazon-sales-traffic.png" target="_blank" rel="noopener">
+              <!-- loading="lazy": defer offscreen image until it's scrolled near.
+                   onerror: if the file isn't there yet, reveal the empty-state. -->
+              <img
+                src="assets/n8n/amazon-sales-traffic.png"
+                alt="n8n workflow: Amazon Selling Partner API sales &amp; traffic report extracted, decompressed, and upserted to Google Sheets"
+                loading="lazy"
+                onerror="this.closest('.flow__frame').classList.add('is-empty')"
+              />
+            </a>
+          </figure>
+
+          <p class="flow__stages">
+            <b>Trigger</b><span class="arrow"> &rarr; </span>Auth (OAuth2)<span class="arrow"> &rarr; </span>Request async report<span class="arrow"> &rarr; </span><b>&#8635; poll until DONE</b><span class="arrow"> &rarr; </span>Download + gunzip<span class="arrow"> &rarr; </span>Parse JSON<span class="arrow"> &rarr; </span>Split by date<span class="arrow"> &rarr; </span><b>Upsert</b> (keyed on date)
+          </p>
+
+          <div class="flow__meta">
+            <div class="writeup flow__note">
+              <div class="writeup__block">
+                <h3>The challenge</h3>
+                <p>
+                  Amazon's Sales &amp; Traffic report is generated <em>asynchronously</em> &mdash; you
+                  request it, and it isn't ready for minutes. A naive &ldquo;call and read&rdquo; just
+                  fails.
+                </p>
+              </div>
+              <div class="writeup__block">
+                <h3>The pattern</h3>
+                <p>
+                  Refresh an OAuth2 token, request the report, then <code>poll</code> on a
+                  wait &rarr; check &rarr; conditional-retry loop until it reports <code>DONE</code>.
+                  A binary chain follows &mdash; download the gzipped document, decompress, parse the
+                  JSON &mdash; then an idempotent upsert keyed on <code>date</code> so re-runs never
+                  duplicate a row.
+                </p>
+              </div>
+            </div>
+
+            <dl class="spec" aria-label="Pipeline specification">
+              <div class="spec__head"><span>Spec</span><span>n8n</span></div>
+              <div class="spec__row"><dt>Source</dt><dd>Amazon SP-API &middot; Sales &amp; Traffic</dd></div>
+              <div class="spec__row"><dt>Trigger</dt><dd>Orchestrator sub-workflow</dd></div>
+              <div class="spec__row"><dt>Window</dt><dd>60 days &middot; daily grain</dd></div>
+              <div class="spec__row"><dt>Pattern</dt><dd><strong>Async report polling + gzip &rarr; JSON</strong></dd></div>
+              <div class="spec__row"><dt>Load</dt><dd>Upsert &middot; keyed on date</dd></div>
+            </dl>
+          </div>
+        </article>
+
+        <!-- ---------- Pipeline B: Shopify Admin API ---------- -->
+        <article class="flow">
+          <div class="flow__head">
+            <span class="flow__tag">Shopify Admin API &rarr; Google Sheets &times;3</span>
+            <a class="flow__zoom" href="assets/n8n/shopify-daily-sales.png" target="_blank" rel="noopener">Enlarge &nearr;</a>
+          </div>
+          <figure class="flow__frame">
+            <figcaption class="flow__placeholder">
+              Save the screenshot to<br />assets/n8n/shopify-daily-sales.png
+            </figcaption>
+            <a href="assets/n8n/shopify-daily-sales.png" target="_blank" rel="noopener">
+              <img
+                src="assets/n8n/shopify-daily-sales.png"
+                alt="n8n workflow: Shopify daily sales export with a rolling window, pagination, and fan-out to three Google Sheets tables"
+                loading="lazy"
+                onerror="this.closest('.flow__frame').classList.add('is-empty')"
+              />
+            </a>
+          </figure>
+
+          <p class="flow__stages">
+            <b>Schedule 04:00</b><span class="arrow"> &rarr; </span>Rolling 5-day window<span class="arrow"> &rarr; </span>loop per day<span class="arrow"> &rarr; </span>Fetch orders (paginated)<span class="arrow"> &rarr; </span>skip empty days<span class="arrow"> &rarr; </span><b>transform &times;3</b> (line-item &middot; order&times;SKU &middot; totals)<span class="arrow"> &rarr; </span><b>Upsert &times;3</b><span class="arrow"> &rarr; </span>merge<span class="arrow"> &rarr; </span>SKU-attributes sub-workflow
+          </p>
+
+          <div class="flow__meta">
+            <div class="writeup flow__note">
+              <div class="writeup__block">
+                <h3>The challenge</h3>
+                <p>
+                  Shopify orders keep changing <em>after</em> the sale &mdash; refunds and status
+                  changes land days later. A one-shot &ldquo;yesterday only&rdquo; pull would miss
+                  them permanently.
+                </p>
+              </div>
+              <div class="writeup__block">
+                <h3>The pattern</h3>
+                <p>
+                  A <code>rolling 5-day</code> re-pull catches late changes; Link-header pagination
+                  handles high-volume days. Each day fans out into three shapes &mdash; line-item
+                  detail (with a refund-map join), order&times;SKU, and order-level totals &mdash; and
+                  idempotent upserts on distinct keys keep the three tables clean. Rate-limit waits and
+                  a dedicated error workflow make it unattended-safe.
+                </p>
+              </div>
+            </div>
+
+            <dl class="spec" aria-label="Pipeline specification">
+              <div class="spec__head"><span>Spec</span><span>n8n</span></div>
+              <div class="spec__row"><dt>Source</dt><dd>Shopify Admin API &middot; orders</dd></div>
+              <div class="spec__row"><dt>Trigger</dt><dd>Daily &middot; 04:00</dd></div>
+              <div class="spec__row"><dt>Window</dt><dd>Rolling 5 days</dd></div>
+              <div class="spec__row"><dt>Pattern</dt><dd><strong>Late-data reprocess + fan-out &times;3</strong></dd></div>
+              <div class="spec__row"><dt>Load</dt><dd>Idempotent upserts (3 keys)</dd></div>
+            </dl>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
   </main>
 
