@@ -966,6 +966,93 @@
       </div>
     </section>
 
+    <!-- ==================== DASHBOARD 04 — Staffing Capacity Model (Excel embed) ====================
+         Office-for-the-web embed of a workbook (Excel on the web renders the iframe).
+         The src is the OneDrive "Embed" URL (em=2). Notable params:
+           AllowTyping=True    → visitors can change inputs (what-if); edits don't save
+           wdDownloadButton=False → no .xlsx download, so the model can't be grabbed
+           wdHideGridlines/Headers=True → cleaner, app-chrome-free look
+           ActiveCell=…!B1     → open framed on the Staffing Projections sheet
+         ================================================================================== -->
+    <section class="dashboard" aria-labelledby="dash-4-title">
+      <div class="wrap">
+
+        <div class="dashboard__head">
+          <span class="dashboard__index">Model</span>
+          <h2 id="dash-4-title">Staffing Capacity Model</h2>
+          <p class="dashboard__tagline">
+            A self-serve Excel model that converts forecasted work volume into the headcount a
+            support team needs each month &mdash; and flags where it&rsquo;s over- or under-staffed.
+            Try it: change the shift length or shrinkage and the projection recomputes live.
+          </p>
+        </div>
+
+        <div class="dashboard__grid">
+
+          <!-- ===================== EMBED (Excel on the web) =====================
+               Portrait ratio frames the Staffing Projections sheet top-to-bottom.
+               Tweak --embed-ratio if you want more/less of the sheet in view. -->
+          <div class="embed" style="--embed-ratio: 3 / 4;">
+            <div class="embed__placeholder" aria-hidden="true">
+              <p class="embed__placeholder-title">Paste your embed code here</p>
+              <p class="embed__placeholder-hint">
+                Excel for the web &rarr; File &rarr; Share &rarr; Embed
+              </p>
+            </div>
+            <iframe
+              class="embed__frame"
+              title="Staffing Capacity Model (interactive Excel workbook)"
+              src="https://1drv.ms/x/c/c76cf16d2fce2f47/IQQ_qtLiRaAwT5uKnKJ6ilW7AYspA9oyybpmA2WqhTDsMDw?em=2&amp;AllowTyping=True&amp;ActiveCell='Staffing%20Projections'!B1&amp;wdHideGridlines=True&amp;wdHideHeaders=True&amp;wdDownloadButton=False&amp;wdInConfigurator=True"
+              scrolling="no"
+              allowfullscreen
+            ></iframe>
+          </div>
+
+          <!-- ===================== SPEC STRIP ===================== -->
+          <dl class="spec" aria-label="Model specification">
+            <div class="spec__head"><span>Spec</span><span>xlsx</span></div>
+            <div class="spec__row"><dt>Stack</dt><dd>Excel &middot; dynamic arrays</dd></div>
+            <div class="spec__row"><dt>Grain</dt><dd>1 task &times; month &middot; 1 member &times; month</dd></div>
+            <div class="spec__row"><dt>Inputs</dt><dd>Shift length &middot; shrinkage %</dd></div>
+            <div class="spec__row"><dt>Pattern</dt><dd><strong>Volume &times; handle-time &rarr; FTE &rarr; HC vs actual</strong></dd></div>
+            <div class="spec__row"><dt>Output</dt><dd>Over / under by month</dd></div>
+          </dl>
+
+          <!-- ===================== WRITE-UP ===================== -->
+          <div class="writeup">
+            <div class="writeup__block">
+              <h3>The business problem</h3>
+              <p>
+                Leaders needed to know, each month, how many people the incoming work actually
+                requires &mdash; and whether the current team covers it &mdash; without re-deriving it
+                by hand every planning cycle.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>The model design</h3>
+              <p>
+                Volume (task &times; month) and per-member worked-days live in structured Tables; a
+                handle-time table maps each task to minutes. Dynamic arrays
+                (<code>UNIQUE</code>, <code>SORT</code>, spill) build the task and roster lists
+                automatically, so adding a task or teammate needs zero formula edits.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>The calc pattern</h3>
+              <p>
+                <code>hours = &Sigma;(volume &times; handle-time)</code> via
+                <code>SUMPRODUCT</code>/<code>XLOOKUP</code>; <code>FTE = ROUNDUP(hours &divide; shift
+                &divide; NETWORKDAYS)</code>; <code>HC = FTE &times; (1 + shrinkage)</code>.
+                <code>NETWORKDAYS</code>/<code>EOMONTH</code> make it working-day-aware and respect
+                each member&rsquo;s hire / offboard dates.
+              </p>
+            </div>
+          </div>
+
+        </div><!-- /.dashboard__grid -->
+      </div>
+    </section>
+
   </main>
 
   <!-- ============================ FOOTER ============================ -->
