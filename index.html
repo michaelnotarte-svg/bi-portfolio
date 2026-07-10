@@ -278,9 +278,12 @@
         column-gap: var(--space-8);
         align-items: start;
       }
-      .embed   { grid-area: embed; }
-      .spec    { grid-area: spec; }
-      .writeup { grid-area: writeup; }
+      /* Scope the named-area placement to THIS grid only — otherwise these
+         leak onto every .spec/.writeup on the page (e.g. inside .flow__meta),
+         inventing phantom grid lines and overlapping them. */
+      .dashboard__grid > .embed   { grid-area: embed; }
+      .dashboard__grid > .spec    { grid-area: spec; }
+      .dashboard__grid > .writeup { grid-area: writeup; }
     }
 
     /* --- The embed itself ---
