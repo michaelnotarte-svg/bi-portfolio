@@ -1127,6 +1127,80 @@
       </div>
     </section>
 
+    <!-- ==================== DASHBOARD 06 — Marketing Budget & Events (Excel embed) ====================
+         OneDrive / Excel-on-the-web embed (em=2). wdDownloadButton=False → no .xlsx download.
+         Opens on the Executive Summary sheet; whole workbook is reachable via the tab bar. -->
+    <section class="dashboard" aria-labelledby="dash-6-title">
+      <div class="wrap">
+
+        <div class="dashboard__head">
+          <span class="dashboard__index">Workbook</span>
+          <h2 id="dash-6-title">Marketing Budget &amp; Events</h2>
+          <p class="dashboard__tagline">
+            An end-to-end marketing-ops workbook &mdash; budget vs. actual by category and year, an
+            event calendar, attendance, and ROI &mdash; all wired off one structured line-item table.
+          </p>
+        </div>
+
+        <div class="embed" style="--embed-ratio: 16 / 9;">
+          <div class="embed__placeholder" aria-hidden="true">
+            <p class="embed__placeholder-title">Paste your embed code here</p>
+            <p class="embed__placeholder-hint">
+              Excel for the web &rarr; File &rarr; Share &rarr; Embed
+            </p>
+          </div>
+          <iframe
+            class="embed__frame"
+            title="Marketing Budget &amp; Events workbook (interactive Excel)"
+            src="https://1drv.ms/x/c/c76cf16d2fce2f47/IQQ-UZXmBhIhTJPZncYRho4WAaikd4Dzq7K8L7utUSRdvNA?em=2&amp;AllowTyping=True&amp;ActiveCell='Executive%20Summary'!B1&amp;wdHideGridlines=True&amp;wdHideHeaders=True&amp;wdDownloadButton=False&amp;wdInConfigurator=True"
+            scrolling="no"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <div class="flow__meta" style="margin-top: var(--space-8);">
+          <div class="writeup flow__note">
+            <div class="writeup__block">
+              <h3>The business problem</h3>
+              <p>
+                Marketing needed one place to plan spend against budget, run the event calendar, and
+                prove ROI &mdash; instead of a scattered spreadsheet per event and per category.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>The model design</h3>
+              <p>
+                One structured line-item table is the spend source; <code>_Events</code> /
+                <code>_Attendance</code> / <code>_ROI</code> tables cover the event lifecycle, and a
+                validated data-entry form (dropdown sources) keeps inputs clean. Nine PivotTables plus
+                a <code>UNIQUE</code>/<code>SUMIFS</code> matrix roll it all up.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>The calc pattern</h3>
+              <p>
+                Executive Summary computes Actual / Budget / Variance per category across three rolling
+                years (<code>YEAR(TODAY())</code>-relative); each cell is a <code>SUMIFS</code>, zeros
+                blanked with <code>IF(&hellip;=0,"-")</code>, variance as
+                <code>IFERROR((actual&minus;budget)&divide;budget)</code>. Events flow calendar &rarr;
+                attendance &rarr; ROI.
+              </p>
+            </div>
+          </div>
+
+          <dl class="spec" aria-label="Workbook specification">
+            <div class="spec__head"><span>Spec</span><span>xlsx</span></div>
+            <div class="spec__row"><dt>Stack</dt><dd>Excel &middot; PivotTables &middot; SUMIFS</dd></div>
+            <div class="spec__row"><dt>Grain</dt><dd>1 row / budget line item</dd></div>
+            <div class="spec__row"><dt>Views</dt><dd>Budget vs actual &middot; Events &middot; Attendance &middot; ROI</dd></div>
+            <div class="spec__row"><dt>Pattern</dt><dd><strong>Structured tables &rarr; PivotTables + variance</strong></dd></div>
+            <div class="spec__row"><dt>Output</dt><dd>Multi-year variance + event ROI</dd></div>
+          </dl>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- ============================ FOOTER ============================ -->
