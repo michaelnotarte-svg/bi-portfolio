@@ -529,6 +529,54 @@
     .writeup.flow__note { grid-template-columns: 1fr; gap: var(--space-6); }
 
     /* ============================================================
+       7c. CODE PANEL  (dark editor-style block for the Power Query / M
+       sample. Code is the hero here, so it goes dark to pop against the
+       light shell — same logic as the report embeds and n8n canvases.)
+       ============================================================ */
+    .code {
+      background: #14161d;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(20, 23, 28, 0.04), 0 12px 30px -18px rgba(20, 23, 28, 0.25);
+    }
+    /* Caption bar: function name (left) + language tag (right). */
+    .code__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: #171a22;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #8b93a1;
+    }
+    .code__head b {
+      color: #c7ccd6;
+      font-weight: 600;
+      text-transform: none;
+      letter-spacing: 0.02em;
+    }
+    .code pre {
+      margin: 0;
+      padding: var(--space-4) var(--space-6);
+      overflow-x: auto;              /* long M lines scroll inside the panel, page never does */
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.65;
+      color: #c7ccd6;                /* base code colour */
+      -webkit-font-smoothing: auto;  /* keep code crisp, not thinned */
+      tab-size: 2;
+    }
+    /* Light-touch syntax highlighting: dimmed comments + coloured strings. */
+    .code pre .cm { color: #6b7688; font-style: italic; }
+    .code pre .st { color: #9ece8a; }
+
+    /* ============================================================
        8. FOOTER
        ============================================================ */
     .site-footer {
@@ -1195,6 +1243,115 @@
             <div class="spec__row"><dt>Views</dt><dd>Budget vs actual &middot; Events &middot; Attendance &middot; ROI</dd></div>
             <div class="spec__row"><dt>Pattern</dt><dd><strong>Structured tables &rarr; PivotTables + variance</strong></dd></div>
             <div class="spec__row"><dt>Output</dt><dd>Multi-year variance + event ROI</dd></div>
+          </dl>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== DASHBOARD 07 — Multi-Source Financial ELT (Power Query, code) ====================
+         Code-forward section (not an embed): a redacted, representative M function is the
+         hero. All source names / paths / credentials are already anonymized. -->
+    <section class="dashboard" aria-labelledby="dash-7-title">
+      <div class="wrap">
+
+        <div class="dashboard__head">
+          <span class="dashboard__index">Code</span>
+          <h2 id="dash-7-title">Multi-Source Financial ELT</h2>
+          <p class="dashboard__tagline">
+            Six financial systems, six completely different export layouts &mdash; indented
+            hierarchies, shifting headers, raw JSON &mdash; normalized into one analysis-ready table
+            in Power Query. A drop-a-file-in-the-folder refresh replaced a manual monthly
+            consolidation.
+          </p>
+        </div>
+
+        <!-- Hero: the code itself, in a dark editor-style panel. -->
+        <div class="code">
+          <div class="code__head"><b>fxSourceA_IncomeStatement</b><span>Power Query &middot; M</span></div>
+          <pre>(FileContent as binary) as table =&gt;
+<span class="cm">// One parser per source system, tuned to that source's quirks.</span>
+let
+    Source = Excel.Workbook(FileContent, null, true),
+    Data = Source{[Name=<span class="st">"PL"</span>, Kind=<span class="st">"Sheet"</span>]}[Data],
+
+    <span class="cm">// Pull property name &amp; reporting month as scalars —</span>
+    <span class="cm">// lighter than temp columns + FillDown on large files</span>
+    RawPropertyName = List.First(List.Select(Data[Column1], each _ &lt;&gt; null and Text.StartsWith(_, <span class="st">"Properties:"</span>))),
+    PropertyName    = if RawPropertyName &lt;&gt; null then Text.Replace(RawPropertyName, <span class="st">"Properties: "</span>, <span class="st">""</span>) else null,
+    RawMonth        = List.First(List.Select(Data[Column1], each _ &lt;&gt; null and Text.StartsWith(_, <span class="st">"As of:"</span>))),
+    MonthValue      = if RawMonth &lt;&gt; null then Text.Replace(RawMonth, <span class="st">"As of: "</span>, <span class="st">""</span>) else null,
+
+    <span class="cm">// Encode hierarchy depth from the leading whitespace on each row</span>
+    AddIndent = Table.AddColumn(Data, <span class="st">"Indent"</span>, each
+        if [Column1] = null then 0
+        else Text.Length([Column1]) - Text.Length(Text.TrimStart([Column1])), type number),
+
+    <span class="cm">// Depth 4 = section header (Type); depth 8 = category</span>
+    AddType     = Table.AddColumn(AddIndent, <span class="st">"Type"</span>, each
+        if [Column2] = null and [Column3] = null and [Indent] = 4 then Text.Clean(Text.Trim([Column1])) else null),
+    AddCategory = Table.AddColumn(AddType, <span class="st">"Categorization"</span>, each
+        if [Indent] = 8 then Text.Clean(Text.Trim([Column1])) else null),
+    FilledHierarchy = Table.FillDown(AddCategory, {<span class="st">"Type"</span>, <span class="st">"Categorization"</span>}),
+
+    <span class="cm">// Keep real line items: below category level, not a subtotal, has a value</span>
+    FilterDetails = Table.SelectRows(FilledHierarchy, each
+        [Indent] &gt;= 8 and
+        not Text.StartsWith(Text.Trim([Column1]), <span class="st">"Total"</span>) and
+        [Column2] &lt;&gt; null and [Column2] &lt;&gt; <span class="st">"Selected Month"</span>),
+    RenamedCols = Table.RenameColumns(FilterDetails,
+        {{<span class="st">"Column1"</span>, <span class="st">"Detail"</span>}, {<span class="st">"Column2"</span>, <span class="st">"Value"</span>}}),
+
+    AddProp    = Table.AddColumn(RenamedCols, <span class="st">"Property Name"</span>, each PropertyName, type text),
+    AddMonth   = Table.AddColumn(AddProp, <span class="st">"Month"</span>, each MonthValue, type text),
+    FinalTable = Table.SelectColumns(AddMonth,
+        {<span class="st">"Detail"</span>, <span class="st">"Value"</span>, <span class="st">"Month"</span>, <span class="st">"Property Name"</span>, <span class="st">"Type"</span>, <span class="st">"Categorization"</span>})
+in
+    FinalTable</pre>
+        </div>
+
+        <p class="flow__stages">
+          <b>6 export formats</b><span class="arrow"> &rarr; </span>per-source M parsers<span class="arrow"> &rarr; </span><code>Folder.Files</code> ingestion<span class="arrow"> &rarr; </span>union<span class="arrow"> &rarr; </span>cleanup<span class="arrow"> &rarr; </span><b>1 long-format table</b>
+        </p>
+
+        <div class="flow__meta" style="margin-top: var(--space-8);">
+          <div class="writeup flow__note">
+            <div class="writeup__block">
+              <h3>The business problem</h3>
+              <p>
+                Six sources each exported monthly financials in a different layout &mdash; indented
+                account hierarchies, shifting header rows, merged summary cells, even raw JSON from an
+                API. No single generic parser could handle them, and consolidating by hand every month
+                didn&rsquo;t scale.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>The design</h3>
+              <p>
+                One custom M parser per source absorbs that source&rsquo;s quirks &mdash; dynamic
+                header detection, indent-depth hierarchy, JSON flattening. <code>Folder.Files</code>
+                pulls every file for a source and invokes the matching parser; all six then union into
+                one long-format table, with a final pass stripping subtotals, zeros, duplicates, and
+                noise categories.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>The result</h3>
+              <p>
+                A manual monthly consolidation became a refresh-on-open workflow: drop next
+                month&rsquo;s file in the folder and it flows through to the same clean schema, ready
+                for Power Pivot and the dashboard &mdash; no per-file rework.
+              </p>
+            </div>
+          </div>
+
+          <dl class="spec" aria-label="Pipeline specification">
+            <div class="spec__head"><span>Spec</span><span>M</span></div>
+            <div class="spec__row"><dt>Stack</dt><dd>Power Query &middot; M</dd></div>
+            <div class="spec__row"><dt>Sources</dt><dd>6 systems + JSON API</dd></div>
+            <div class="spec__row"><dt>Grain</dt><dd>1 row / line item (unpivoted)</dd></div>
+            <div class="spec__row"><dt>Pattern</dt><dd><strong>Per-source parsers &rarr; union &rarr; clean</strong></dd></div>
+            <div class="spec__row"><dt>Refresh</dt><dd>Drop file in folder &middot; on open</dd></div>
           </dl>
         </div>
 
