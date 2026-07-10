@@ -1051,6 +1051,82 @@
       </div>
     </section>
 
+    <!-- ==================== DASHBOARD 05 — Support KPIs (Google Sheets embed) ====================
+         Google Sheets "publish to web" (pubhtml) iframe. Unlike OneDrive, this frames
+         fine anywhere. It's a read-only snapshot (the sheet's slicers aren't live for
+         viewers) that re-publishes when the sheet changes. widget=true shows the tab bar. -->
+    <section class="dashboard" aria-labelledby="dash-5-title">
+      <div class="wrap">
+
+        <div class="dashboard__head">
+          <span class="dashboard__index">Dashboard</span>
+          <h2 id="dash-5-title">Support KPIs</h2>
+          <p class="dashboard__tagline">
+            A clean, self-serve support dashboard built entirely in Google Sheets &mdash; ticket
+            volume by product and concern type, plus CSAT. Proof that a sharp, robust summary
+            doesn&rsquo;t always need a BI license.
+          </p>
+        </div>
+
+        <!-- Full-width, landscape frame for the Sheets dashboard. -->
+        <div class="embed" style="--embed-ratio: 16 / 10;">
+          <div class="embed__placeholder" aria-hidden="true">
+            <p class="embed__placeholder-title">Paste your embed code here</p>
+            <p class="embed__placeholder-hint">
+              Google Sheets &rarr; File &rarr; Share &rarr; Publish to web &rarr; Embed
+            </p>
+          </div>
+          <iframe
+            class="embed__frame"
+            title="Support KPIs dashboard (Google Sheets)"
+            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRxLvIvHRmAAQSmG3DlJa41rIQl4iRoDIQayX94XqS-_S1BiM2hPmCRSMKRzA-AWdRmcFeU2svvyaIH/pubhtml?widget=true&amp;headers=false"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <div class="flow__meta" style="margin-top: var(--space-8);">
+          <div class="writeup flow__note">
+            <div class="writeup__block">
+              <h3>The business problem</h3>
+              <p>
+                Leaders needed one place to see what drives ticket volume &mdash; which products,
+                which concerns &mdash; and how CSAT tracks, sliceable by period and channel, instead
+                of re-filtering a raw export every time.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>The model design</h3>
+              <p>
+                A single flat ticket log (~121K rows) is the one source; four filter cells act as
+                slicers. Every metric is a <code>SUMIFS</code> reading those cells, with
+                <code>IF("All"&rarr;"&lt;&gt;")</code> wildcard logic so a blank filter means
+                &ldquo;all,&rdquo; wrapped in <code>IFERROR</code>. Share-% is a
+                <code>SUMIFS</code> ratio.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>Why just Sheets</h3>
+              <p>
+                No warehouse, no BI license, no infrastructure &mdash; a flat log, a few dozen
+                <code>SUMIFS</code>, and clean formatting deliver a dashboard a non-technical team can
+                own and extend themselves. Right-sized beats over-built.
+              </p>
+            </div>
+          </div>
+
+          <dl class="spec" aria-label="Dashboard specification">
+            <div class="spec__head"><span>Spec</span><span>gsheets</span></div>
+            <div class="spec__row"><dt>Stack</dt><dd>Google Sheets &middot; SUMIFS</dd></div>
+            <div class="spec__row"><dt>Grain</dt><dd>1 row / ticket (~121K)</dd></div>
+            <div class="spec__row"><dt>Filters</dt><dd>Year &middot; Month &middot; Week &middot; Channel</dd></div>
+            <div class="spec__row"><dt>Pattern</dt><dd><strong>Slicer-driven SUMIFS over a flat log</strong></dd></div>
+            <div class="spec__row"><dt>Delivery</dt><dd>Publish-to-web embed</dd></div>
+          </dl>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- ============================ FOOTER ============================ -->
