@@ -987,39 +987,29 @@
           </p>
         </div>
 
-        <div class="dashboard__grid">
-
-          <!-- ===================== EMBED (Excel on the web) =====================
-               Portrait ratio frames the Staffing Projections sheet top-to-bottom.
-               Tweak --embed-ratio if you want more/less of the sheet in view. -->
-          <div class="embed" style="--embed-ratio: 3 / 4;">
-            <div class="embed__placeholder" aria-hidden="true">
-              <p class="embed__placeholder-title">Paste your embed code here</p>
-              <p class="embed__placeholder-hint">
-                Excel for the web &rarr; File &rarr; Share &rarr; Embed
-              </p>
-            </div>
-            <iframe
-              class="embed__frame"
-              title="Staffing Capacity Model (interactive Excel workbook)"
-              src="https://1drv.ms/x/c/c76cf16d2fce2f47/IQQ_qtLiRaAwT5uKnKJ6ilW7AYspA9oyybpmA2WqhTDsMDw?em=2&amp;AllowTyping=True&amp;ActiveCell='Staffing%20Projections'!B1&amp;wdHideGridlines=True&amp;wdHideHeaders=True&amp;wdDownloadButton=False&amp;wdInConfigurator=True"
-              scrolling="no"
-              allowfullscreen
-            ></iframe>
+        <!-- ===================== EMBED (Excel on the web) — full-width, landscape =====================
+             A wide window so all the month columns show across; the workbook is a wide sheet.
+             Full-width (not in the spec-rail grid) gives it the room. Tweak --embed-ratio
+             to trade width for height. -->
+        <div class="embed" style="--embed-ratio: 16 / 9;">
+          <div class="embed__placeholder" aria-hidden="true">
+            <p class="embed__placeholder-title">Paste your embed code here</p>
+            <p class="embed__placeholder-hint">
+              Excel for the web &rarr; File &rarr; Share &rarr; Embed
+            </p>
           </div>
+          <iframe
+            class="embed__frame"
+            title="Staffing Capacity Model (interactive Excel workbook)"
+            src="https://1drv.ms/x/c/c76cf16d2fce2f47/IQQ_qtLiRaAwT5uKnKJ6ilW7AYspA9oyybpmA2WqhTDsMDw?em=2&amp;AllowTyping=True&amp;ActiveCell='Staffing%20Projections'!B1&amp;wdHideGridlines=True&amp;wdHideHeaders=True&amp;wdDownloadButton=False&amp;wdInConfigurator=True"
+            scrolling="no"
+            allowfullscreen
+          ></iframe>
+        </div>
 
-          <!-- ===================== SPEC STRIP ===================== -->
-          <dl class="spec" aria-label="Model specification">
-            <div class="spec__head"><span>Spec</span><span>xlsx</span></div>
-            <div class="spec__row"><dt>Stack</dt><dd>Excel &middot; dynamic arrays</dd></div>
-            <div class="spec__row"><dt>Grain</dt><dd>1 task &times; month &middot; 1 member &times; month</dd></div>
-            <div class="spec__row"><dt>Inputs</dt><dd>Shift length &middot; shrinkage %</dd></div>
-            <div class="spec__row"><dt>Pattern</dt><dd><strong>Volume &times; handle-time &rarr; FTE &rarr; HC vs actual</strong></dd></div>
-            <div class="spec__row"><dt>Output</dt><dd>Over / under by month</dd></div>
-          </dl>
-
-          <!-- ===================== WRITE-UP ===================== -->
-          <div class="writeup">
+        <!-- Meta row: write-up (left) + spec strip (right rail), like the pipeline section. -->
+        <div class="flow__meta" style="margin-top: var(--space-8);">
+          <div class="writeup flow__note">
             <div class="writeup__block">
               <h3>The business problem</h3>
               <p>
@@ -1049,7 +1039,15 @@
             </div>
           </div>
 
-        </div><!-- /.dashboard__grid -->
+          <dl class="spec" aria-label="Model specification">
+            <div class="spec__head"><span>Spec</span><span>xlsx</span></div>
+            <div class="spec__row"><dt>Stack</dt><dd>Excel &middot; dynamic arrays</dd></div>
+            <div class="spec__row"><dt>Grain</dt><dd>1 task &times; month &middot; 1 member &times; month</dd></div>
+            <div class="spec__row"><dt>Inputs</dt><dd>Shift length &middot; shrinkage %</dd></div>
+            <div class="spec__row"><dt>Pattern</dt><dd><strong>Volume &times; handle-time &rarr; FTE &rarr; HC vs actual</strong></dd></div>
+            <div class="spec__row"><dt>Output</dt><dd>Over / under by month</dd></div>
+          </dl>
+        </div>
       </div>
     </section>
 
