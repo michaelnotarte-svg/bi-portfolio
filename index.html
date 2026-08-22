@@ -580,6 +580,56 @@
     .code pre .st { color: #9ece8a; }
 
     /* ============================================================
+       7d. SHOT GALLERY  (a row of portrait screenshots — e.g. Zapier
+       zap canvases, which are tall/vertical. Same empty-state +
+       onerror pattern as .flow__frame, laid out in a responsive grid.)
+       ============================================================ */
+    .shots {
+      display: grid;
+      gap: var(--space-4);
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 46rem) {
+      .shots { grid-template-columns: repeat(3, 1fr); align-items: start; }
+    }
+    .shot__cap {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-2);
+      margin-bottom: var(--space-2);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.03em;
+      color: var(--ink-muted);
+    }
+    .shot__cap a { white-space: nowrap; }
+    .shot__frame {
+      position: relative;
+      aspect-ratio: 2 / 3;            /* portrait; Zapier zaps run tall */
+      background: #f1f0eb;            /* light, to match Zapier's canvas so contain-letterbox blends */
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .shot__frame a { position: absolute; inset: 0; z-index: 1; display: block; }
+    .shot__frame img {
+      width: 100%; height: 100%;
+      object-fit: contain;           /* whole zap visible; portrait shots fit by height */
+      object-position: top;
+    }
+    /* Empty-state, shown only when the PNG is missing (onerror adds .is-empty). */
+    .shot__placeholder {
+      position: absolute; inset: 0; z-index: 0;
+      display: none;
+      place-content: center; gap: var(--space-2);
+      text-align: center; padding: var(--space-4);
+      font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-faint);
+      background: repeating-linear-gradient(-45deg, transparent 0 11px, rgba(20, 23, 28, 0.05) 11px 12px);
+    }
+    .shot__frame.is-empty a { display: none; }
+    .shot__frame.is-empty .shot__placeholder { display: grid; }
+
+    /* ============================================================
        8. FOOTER
        ============================================================ */
     .site-footer {
@@ -1356,6 +1406,108 @@ in
             <div class="spec__row"><dt>Grain</dt><dd>1 row / line item (unpivoted)</dd></div>
             <div class="spec__row"><dt>Pattern</dt><dd><strong>Per-source parsers &rarr; union &rarr; clean</strong></dd></div>
             <div class="spec__row"><dt>Refresh</dt><dd>Drop file in folder &middot; on open</dd></div>
+          </dl>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== DASHBOARD 08 — Onboarding Automation (Zapier, screenshots) ====================
+         Image-based system section. SAVE 2-3 anonymized PORTRAIT zap screenshots at:
+           assets/zapier/payment-polling.png   (the new auto-trigger — headline)
+           assets/zapier/enrollment-upsert.png
+           assets/zapier/slack-provisioning.png
+         Each frame shows a "save it here" empty-state until its PNG exists.
+         NO client names (ScaleTutor / Patrick / Bookworm), webhook URLs, or tokens. -->
+    <section class="dashboard" aria-labelledby="dash-8-title">
+      <div class="wrap">
+
+        <div class="dashboard__head">
+          <span class="dashboard__index">Automation</span>
+          <h2 id="dash-8-title">Onboarding Automation</h2>
+          <p class="dashboard__tagline">
+            A multi-tool onboarding system &mdash; CRM events drive Zapier workflows that keep one
+            master Google Sheet in sync and spin up Slack + email touches. The newest piece replaces a
+            manual &ldquo;deal won&rdquo; tag with a payment-polling auto-trigger.
+          </p>
+        </div>
+
+        <!-- Portrait gallery of representative zaps. -->
+        <div class="shots">
+
+          <div class="shot">
+            <p class="shot__cap"><span>Payment-polling trigger</span><a href="assets/zapier/payment-polling.png" target="_blank" rel="noopener">Enlarge &nearr;</a></p>
+            <figure class="shot__frame">
+              <figcaption class="shot__placeholder">Save to<br />assets/zapier/payment-polling.png</figcaption>
+              <a href="assets/zapier/payment-polling.png" target="_blank" rel="noopener">
+                <img src="assets/zapier/payment-polling.png" alt="Zapier zap: hourly polling of payments auto-creates the CRM contact" loading="lazy" onerror="this.closest('.shot__frame').classList.add('is-empty')" />
+              </a>
+            </figure>
+          </div>
+
+          <div class="shot">
+            <p class="shot__cap"><span>Contact form &rarr; Slack</span><a href="assets/zapier/contact-form.png" target="_blank" rel="noopener">Enlarge &nearr;</a></p>
+            <figure class="shot__frame">
+              <figcaption class="shot__placeholder">Save to<br />assets/zapier/contact-form.png</figcaption>
+              <a href="assets/zapier/contact-form.png" target="_blank" rel="noopener">
+                <img src="assets/zapier/contact-form.png" alt="Zapier zap: contact form webhook looks up the row and calls the Slack sub-zap" loading="lazy" onerror="this.closest('.shot__frame').classList.add('is-empty')" />
+              </a>
+            </figure>
+          </div>
+
+          <div class="shot">
+            <p class="shot__cap"><span>Slack channel flow</span><a href="assets/zapier/slack-channel-flow.png" target="_blank" rel="noopener">Enlarge &nearr;</a></p>
+            <figure class="shot__frame">
+              <figcaption class="shot__placeholder">Save to<br />assets/zapier/slack-channel-flow.png</figcaption>
+              <a href="assets/zapier/slack-channel-flow.png" target="_blank" rel="noopener">
+                <img src="assets/zapier/slack-channel-flow.png" alt="Zapier sub-zap: provisions a Slack channel and writes IDs back to the sheet" loading="lazy" onerror="this.closest('.shot__frame').classList.add('is-empty')" />
+              </a>
+            </figure>
+          </div>
+
+        </div>
+
+        <p class="flow__stages">
+          <b>Hourly schedule</b><span class="arrow"> &rarr; </span>Code polls payments<span class="arrow"> &rarr; </span>loop new payments<span class="arrow"> &rarr; </span>branch<span class="arrow"> &rarr; </span><b>add/update CRM contact</b><span class="arrow"> &rarr; </span>log to Sheets<span class="arrow"> &rarr; </span>Slack notify
+        </p>
+
+        <div class="flow__meta" style="margin-top: var(--space-8);">
+          <div class="writeup flow__note">
+            <div class="writeup__block">
+              <h3>The business problem</h3>
+              <p>
+                When a family enrolls, five things have to happen across five tools &mdash; a welcome
+                email and SMS, a shared Slack space, and one clean record. Done by hand it didn&rsquo;t
+                scale and drifted out of sync.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>The system design</h3>
+              <p>
+                CRM events (form submitted, agreement signed, call booked, payment received) fire
+                Zapier webhooks; six Zaps read and write one master Google Sheet as the system of
+                record, with Slack and Gmail as side outputs. <code>Upsert</code> logic keeps rows
+                unique and empty-cell guards keep re-runs idempotent.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>The new upgrade</h3>
+              <p>
+                The old &ldquo;deal won&rdquo; step relied on someone manually tagging the contact. The
+                newest Zap polls the payments API hourly with a <code>Code</code> step, loops over new
+                payments, and auto-creates/updates the CRM contact &mdash; so a payment itself triggers
+                onboarding. Fully automated, no manual tagging.
+              </p>
+            </div>
+          </div>
+
+          <dl class="spec" aria-label="Automation specification">
+            <div class="spec__head"><span>Spec</span><span>zapier</span></div>
+            <div class="spec__row"><dt>Stack</dt><dd>Zapier &middot; GoHighLevel &middot; Sheets &middot; Slack &middot; Gmail</dd></div>
+            <div class="spec__row"><dt>Triggers</dt><dd>Hourly poll + CRM webhooks</dd></div>
+            <div class="spec__row"><dt>Zaps</dt><dd>6 (webhook + internal)</dd></div>
+            <div class="spec__row"><dt>Data hub</dt><dd>1 master Google Sheet</dd></div>
+            <div class="spec__row"><dt>Pattern</dt><dd><strong>Event-driven upsert + polling auto-trigger</strong></dd></div>
           </dl>
         </div>
 
