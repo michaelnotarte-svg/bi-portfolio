@@ -1113,29 +1113,26 @@
           <p class="dashboard__tagline">
             A self-serve Excel model that converts forecasted work volume into the headcount a
             support team needs each month &mdash; and flags where it&rsquo;s over- or under-staffed.
-            Try it: change the shift length or shrinkage and the projection recomputes live.
+            Shift length and shrinkage are live inputs &mdash; open the workbook to run the what-ifs.
           </p>
         </div>
 
-        <!-- ===================== EMBED (Excel on the web) — full-width, landscape =====================
-             A wide window so all the month columns show across; the workbook is a wide sheet.
-             Full-width (not in the spec-rail grid) gives it the room. Tweak --embed-ratio
-             to trade width for height. -->
-        <div class="embed" style="--embed-ratio: 16 / 9;">
-          <div class="embed__placeholder" aria-hidden="true">
-            <p class="embed__placeholder-title">Paste your embed code here</p>
-            <p class="embed__placeholder-hint">
-              Excel for the web &rarr; File &rarr; Share &rarr; Embed
-            </p>
-          </div>
-          <iframe
-            class="embed__frame"
-            title="Staffing Capacity Model (interactive Excel workbook)"
-            src="https://1drv.ms/x/c/c76cf16d2fce2f47/IQQ_qtLiRaAwT5uKnKJ6ilW7AYspA9oyybpmA2WqhTDsMDw?em=2&amp;AllowTyping=True&amp;ActiveCell='Staffing%20Projections'!B1&amp;wdHideGridlines=True&amp;wdHideHeaders=True&amp;wdDownloadButton=False&amp;wdInConfigurator=True"
-            scrolling="no"
-            allowfullscreen
-          ></iframe>
+        <!-- Screenshot + "open the real file" link. (OneDrive embeds broke after the
+             consumer→SharePoint migration; screenshots are reliable.) Reuses .flow__frame.
+             SAVE a wide dashboard screenshot to assets/xlsx/staffing.png.
+             The "Open the live workbook" href needs a WORKING ANONYMOUS view link — the
+             OneDrive link blanks out for logged-out visitors; use a Google Sheets/Drive
+             "anyone with link → view" link instead. -->
+        <div class="flow__head">
+          <span class="flow__tag">Excel workbook</span>
+          <a class="flow__zoom" href="https://1drv.ms/x/c/c76cf16d2fce2f47/IQA_qtLiRaAwT5uKnKJ6ilW7Aacrm7CDPCfub6AvBO47JIg?e=dst7sB" target="_blank" rel="noopener">Open the live workbook &nearr;</a>
         </div>
+        <figure class="flow__frame" style="aspect-ratio: 16 / 9; background: #f1f0eb;">
+          <figcaption class="flow__placeholder">Save the screenshot to<br />assets/xlsx/staffing.png</figcaption>
+          <a href="assets/xlsx/staffing.png" target="_blank" rel="noopener">
+            <img src="assets/xlsx/staffing.png" alt="Staffing Capacity Model workbook — monthly headcount projections by task" loading="lazy" onerror="this.closest('.flow__frame').classList.add('is-empty')" />
+          </a>
+        </figure>
 
         <!-- Meta row: write-up (left) + spec strip (right rail), like the pipeline section. -->
         <div class="flow__meta" style="margin-top: var(--space-8);">
@@ -1272,21 +1269,20 @@
           </p>
         </div>
 
-        <div class="embed" style="--embed-ratio: 16 / 9;">
-          <div class="embed__placeholder" aria-hidden="true">
-            <p class="embed__placeholder-title">Paste your embed code here</p>
-            <p class="embed__placeholder-hint">
-              Excel for the web &rarr; File &rarr; Share &rarr; Embed
-            </p>
-          </div>
-          <iframe
-            class="embed__frame"
-            title="Marketing Budget &amp; Events workbook (interactive Excel)"
-            src="https://1drv.ms/x/c/c76cf16d2fce2f47/IQQ-UZXmBhIhTJPZncYRho4WAaikd4Dzq7K8L7utUSRdvNA?em=2&amp;AllowTyping=True&amp;ActiveCell='Executive%20Summary'!B1&amp;wdHideGridlines=True&amp;wdHideHeaders=True&amp;wdDownloadButton=False&amp;wdInConfigurator=True"
-            scrolling="no"
-            allowfullscreen
-          ></iframe>
+        <!-- Screenshot + view link (OneDrive embeds broke). Reuses .flow__frame.
+             SAVE a wide dashboard screenshot to assets/xlsx/marketing.png.
+             "Open the live workbook" needs a WORKING ANONYMOUS view link (Google Sheets/
+             Drive "anyone with link → view") — the OneDrive link blanks out for visitors. -->
+        <div class="flow__head">
+          <span class="flow__tag">Excel workbook</span>
+          <a class="flow__zoom" href="https://1drv.ms/x/c/c76cf16d2fce2f47/IQA-UZXmBhIhTJPZncYRho4WASFIiBZn-9Rlq5HR_hEdLTw?e=nhAIuh" target="_blank" rel="noopener">Open the live workbook &nearr;</a>
         </div>
+        <figure class="flow__frame" style="aspect-ratio: 16 / 9; background: #f1f0eb;">
+          <figcaption class="flow__placeholder">Save the screenshot to<br />assets/xlsx/marketing.png</figcaption>
+          <a href="assets/xlsx/marketing.png" target="_blank" rel="noopener">
+            <img src="assets/xlsx/marketing.png" alt="Marketing Budget & Events workbook — budget vs. actual by category and year" loading="lazy" onerror="this.closest('.flow__frame').classList.add('is-empty')" />
+          </a>
+        </figure>
 
         <div class="flow__meta" style="margin-top: var(--space-8);">
           <div class="writeup flow__note">
