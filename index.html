@@ -1603,6 +1603,147 @@ in
       </div>
     </section>
 
+    <!-- ==================== DASHBOARD 09 — Customer Ops Data Platform (Microsoft Fabric) ====================
+         Case-study section. Hero is a hand-built medallion architecture diagram (generic — no
+         vendor names). The real Fabric canvas screenshots are NOT used: they expose vendor
+         names (Aircall / Brandbastion) the case study anonymized. -->
+    <section class="dashboard" aria-labelledby="dash-9-title">
+      <div class="wrap">
+
+        <div class="dashboard__head">
+          <span class="dashboard__index">Platform</span>
+          <h2 id="dash-9-title">Customer Ops Data Platform</h2>
+          <p class="dashboard__tagline">
+            An end-to-end customer-operations data platform on Microsoft Fabric. One orchestrated
+            pipeline pulls helpdesk, telephony, social, and manual sources through a medallion
+            architecture, computes the support KPIs in T-SQL, enriches sentiment, and refreshes the
+            Power BI model &mdash; one scheduled run replaces the manual consolidation.
+          </p>
+        </div>
+
+        <!-- Medallion architecture diagram (hand-built inline SVG). -->
+        <div class="diagram">
+          <div class="diagram__cap"><span>Architecture</span><span>Microsoft Fabric &middot; medallion</span></div>
+          <div class="diagram__body">
+            <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="Medallion data platform on Microsoft Fabric: REST APIs, Excel, and Google Sheets land raw in a Lakehouse, copy to Warehouse staging, merge via T-SQL into Silver ODS tables, feed reporting KPI tables, and refresh a Power BI semantic model.">
+              <defs>
+                <marker id="fah" markerWidth="9" markerHeight="7" refX="7" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+                  <path d="M0,0 L7,3 L0,6 Z" style="fill:var(--ink-faint)" />
+                </marker>
+              </defs>
+
+              <!-- SOURCES -->
+              <rect x="14" y="50" width="176" height="200" rx="3" style="fill:var(--surface);stroke:var(--line-strong)" />
+              <text x="102" y="76" text-anchor="middle" style="font-family:var(--font-sans);font-weight:600;font-size:14px;fill:var(--ink)">Sources</text>
+              <line x1="30" y1="88" x2="174" y2="88" style="stroke:var(--line)" />
+              <text x="30" y="112" style="font-family:var(--font-mono);font-size:11px;fill:var(--ink-muted)">REST APIs</text>
+              <text x="40" y="130" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-faint)">helpdesk / CRM</text>
+              <text x="40" y="146" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-faint)">cloud telephony</text>
+              <text x="40" y="162" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-faint)">social moderation</text>
+              <text x="30" y="190" style="font-family:var(--font-mono);font-size:11px;fill:var(--ink-muted)">Excel workbook</text>
+              <text x="30" y="208" style="font-family:var(--font-mono);font-size:11px;fill:var(--ink-muted)">Google Sheets</text>
+
+              <!-- arrow · sources → raw -->
+              <line x1="190" y1="150" x2="206" y2="150" style="stroke:var(--ink-faint);stroke-width:1.5" marker-end="url(#fah)" />
+
+              <text x="490" y="40" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;fill:var(--ink-faint)">MEDALLION LAYERS</text>
+
+              <!-- RAW -->
+              <rect x="210" y="95" width="128" height="110" rx="3" style="fill:var(--surface);stroke:var(--line-strong)" />
+              <rect x="210" y="95" width="4" height="110" style="fill:#b5833f" />
+              <text x="278" y="130" text-anchor="middle" style="font-family:var(--font-sans);font-weight:600;font-size:14px;fill:var(--ink)">Raw</text>
+              <text x="278" y="152" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-muted)">Lakehouse &middot; Delta</text>
+              <text x="278" y="170" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-faint)">PySpark notebooks</text>
+              <line x1="338" y1="150" x2="350" y2="150" style="stroke:var(--ink-faint);stroke-width:1.5" marker-end="url(#fah)" />
+
+              <!-- STAGING -->
+              <rect x="354" y="95" width="128" height="110" rx="3" style="fill:var(--surface);stroke:var(--line-strong)" />
+              <rect x="354" y="95" width="4" height="110" style="fill:#8a94a6" />
+              <text x="422" y="130" text-anchor="middle" style="font-family:var(--font-sans);font-weight:600;font-size:14px;fill:var(--ink)">Staging</text>
+              <text x="422" y="152" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-muted)">Warehouse</text>
+              <text x="422" y="170" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-faint)">Copy activities</text>
+              <line x1="482" y1="150" x2="494" y2="150" style="stroke:var(--ink-faint);stroke-width:1.5" marker-end="url(#fah)" />
+
+              <!-- SILVER -->
+              <rect x="498" y="95" width="128" height="110" rx="3" style="fill:var(--surface);stroke:var(--line-strong)" />
+              <rect x="498" y="95" width="4" height="110" style="fill:#aab2bf" />
+              <text x="566" y="130" text-anchor="middle" style="font-family:var(--font-sans);font-weight:600;font-size:14px;fill:var(--ink)">Silver &middot; ODS</text>
+              <text x="566" y="152" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-muted)">T-SQL procs</text>
+              <text x="566" y="170" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-faint)">upsert / del-insert</text>
+              <line x1="626" y1="150" x2="638" y2="150" style="stroke:var(--ink-faint);stroke-width:1.5" marker-end="url(#fah)" />
+
+              <!-- REPORTING -->
+              <rect x="642" y="95" width="128" height="110" rx="3" style="fill:var(--surface);stroke:var(--line-strong)" />
+              <rect x="642" y="95" width="4" height="110" style="fill:#c79a2e" />
+              <text x="710" y="130" text-anchor="middle" style="font-family:var(--font-sans);font-weight:600;font-size:14px;fill:var(--ink)">Reporting</text>
+              <text x="710" y="152" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-muted)">KPI tables</text>
+              <text x="710" y="170" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-faint)">FRT &middot; CSAT &middot; resolution</text>
+              <line x1="770" y1="150" x2="786" y2="150" style="stroke:var(--ink-faint);stroke-width:1.5" marker-end="url(#fah)" />
+
+              <!-- POWER BI -->
+              <rect x="790" y="95" width="180" height="110" rx="3" style="fill:var(--surface);stroke:var(--cobalt);stroke-width:1.5" />
+              <rect x="790" y="95" width="4" height="110" style="fill:var(--cobalt)" />
+              <text x="882" y="130" text-anchor="middle" style="font-family:var(--font-sans);font-weight:700;font-size:15px;fill:var(--ink)">Power BI</text>
+              <text x="882" y="152" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;fill:var(--cobalt-deep)">semantic model</text>
+              <text x="882" y="170" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;fill:var(--ink-faint)">dashboards &middot; paginated</text>
+
+              <!-- caption -->
+              <text x="14" y="282" style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.02em;fill:var(--ink-faint)">Orchestrated in Fabric Data Factory · dependency-gated · incremental upserts · sentiment enrichment before the final refresh</text>
+            </svg>
+          </div>
+        </div>
+
+        <p class="flow__stages">
+          <b>REST + manual sources</b><span class="arrow"> &rarr; </span>Raw (Lakehouse)<span class="arrow"> &rarr; </span>Staging (Warehouse)<span class="arrow"> &rarr; </span>Silver (ODS &middot; T-SQL)<span class="arrow"> &rarr; </span>KPIs<span class="arrow"> &rarr; </span>sentiment<span class="arrow"> &rarr; </span><b>Power BI refresh</b>
+        </p>
+
+        <div class="flow__meta" style="margin-top: var(--space-8);">
+          <div class="writeup flow__note">
+            <div class="writeup__block">
+              <h3>The problem</h3>
+              <p>
+                Support data lived in five-plus places &mdash; tickets and tags in a helpdesk
+                platform, calls and transcripts in a telephony tool, replies in a social moderation
+                platform, rosters and QA scores kept by hand in Excel and Google Sheets. Reporting
+                meant stitching it together manually; KPIs like first-response and resolution time
+                came out differently depending on who pulled them, and nothing refreshed on its own.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>What I built</h3>
+              <p>
+                One orchestrated Fabric pipeline pulls every source through a medallion architecture
+                &mdash; raw lands in a Lakehouse, staging normalizes types in the Warehouse, T-SQL
+                stored procedures merge clean, deduplicated <code>ODS</code> tables &mdash; computes the
+                support KPIs, runs sentiment enrichment, and refreshes the Power BI semantic model.
+              </p>
+            </div>
+            <div class="writeup__block">
+              <h3>Reliability</h3>
+              <p>
+                Facts <code>upsert</code> on business keys, so reruns update rather than duplicate;
+                every step is gated on the one before it, so the model never refreshes on partial
+                data. Telephony and sentiment run as isolated child pipelines (rerun without replaying
+                everything), historical backfills are checkpoint-driven and resumable, and loads
+                anti-join dedup before writes and log missing-record 404s instead of failing.
+              </p>
+            </div>
+          </div>
+
+          <dl class="spec" aria-label="Platform specification">
+            <div class="spec__head"><span>Spec</span><span>fabric</span></div>
+            <div class="spec__row"><dt>Platform</dt><dd>Microsoft Fabric</dd></div>
+            <div class="spec__row"><dt>Sources</dt><dd>REST APIs &middot; Excel &middot; Sheets</dd></div>
+            <div class="spec__row"><dt>Architecture</dt><dd><strong>Medallion: Raw &rarr; Silver &rarr; reporting</strong></dd></div>
+            <div class="spec__row"><dt>Compute</dt><dd>PySpark &middot; T-SQL stored procs</dd></div>
+            <div class="spec__row"><dt>Output</dt><dd>Power BI model + paginated</dd></div>
+          </dl>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- ============================ FOOTER ============================ -->
