@@ -658,6 +658,19 @@
     .diagram__body svg { display: block; width: 100%; min-width: 680px; height: auto; }
 
     /* ============================================================
+       7f. PIPELINE SHOTS  (gallery of real pipeline-canvas screenshots:
+       one near-square overview capped in width, two landscape details
+       side by side. Reuses .flow__head / .flow__frame, light backdrop.)
+       ============================================================ */
+    .pipeshots { display: grid; gap: var(--space-6); }
+    .pipeshots figure.flow__frame { background: #fff; }   /* Fabric canvas is white */
+    .pipeshots__hero { max-width: 34rem; margin-inline: auto; width: 100%; }
+    .pipeshots__row { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
+    @media (min-width: 46rem) {
+      .pipeshots__row { grid-template-columns: 1fr 1fr; align-items: start; }
+    }
+
+    /* ============================================================
        8. FOOTER
        ============================================================ */
     .site-footer {
@@ -1697,6 +1710,47 @@ in
         <p class="flow__stages">
           <b>REST + manual sources</b><span class="arrow"> &rarr; </span>Raw (Lakehouse)<span class="arrow"> &rarr; </span>Staging (Warehouse)<span class="arrow"> &rarr; </span>Silver (ODS &middot; T-SQL)<span class="arrow"> &rarr; </span>KPIs<span class="arrow"> &rarr; </span>sentiment<span class="arrow"> &rarr; </span><b>Power BI refresh</b>
         </p>
+
+        <!-- The real pipeline canvas in Fabric Data Factory (Aircall/Brandbastion vendor
+             names are off-the-shelf SaaS, cleared for the portfolio). -->
+        <div class="pipeshots" style="margin-top: var(--space-8);">
+          <div class="pipeshots__hero">
+            <div class="flow__head">
+              <span class="flow__tag">Full orchestration pipeline</span>
+              <a class="flow__zoom" href="assets/fabric/fig1-full-pipeline.png" target="_blank" rel="noopener">Enlarge &nearr;</a>
+            </div>
+            <figure class="flow__frame" style="aspect-ratio: 663 / 697;">
+              <a href="assets/fabric/fig1-full-pipeline.png" target="_blank" rel="noopener">
+                <img src="assets/fabric/fig1-full-pipeline.png" alt="Full orchestration pipeline in Microsoft Fabric Data Factory" loading="lazy" />
+              </a>
+            </figure>
+          </div>
+
+          <div class="pipeshots__row">
+            <div>
+              <div class="flow__head">
+                <span class="flow__tag">Users · roster · QA · tags</span>
+                <a class="flow__zoom" href="assets/fabric/fig2-users-roster-qa-tags.png" target="_blank" rel="noopener">Enlarge &nearr;</a>
+              </div>
+              <figure class="flow__frame" style="aspect-ratio: 969 / 576;">
+                <a href="assets/fabric/fig2-users-roster-qa-tags.png" target="_blank" rel="noopener">
+                  <img src="assets/fabric/fig2-users-roster-qa-tags.png" alt="People and reference-data branches: users notebook, roster, QA, and tags, each landing then merged by its stored procedure" loading="lazy" />
+                </a>
+              </figure>
+            </div>
+            <div>
+              <div class="flow__head">
+                <span class="flow__tag">Tickets · KPIs · telephony · social</span>
+                <a class="flow__zoom" href="assets/fabric/fig3-tickets-kpi-telephony-social.png" target="_blank" rel="noopener">Enlarge &nearr;</a>
+              </div>
+              <figure class="flow__frame" style="aspect-ratio: 800 / 398;">
+                <a href="assets/fabric/fig3-tickets-kpi-telephony-social.png" target="_blank" rel="noopener">
+                  <img src="assets/fabric/fig3-tickets-kpi-telephony-social.png" alt="Ticket and KPI branch with parallel KPI procedures, telephony and social sub-pipelines, ending in sentiment enrichment and the semantic-model refresh" loading="lazy" />
+                </a>
+              </figure>
+            </div>
+          </div>
+        </div>
 
         <div class="flow__meta" style="margin-top: var(--space-8);">
           <div class="writeup flow__note">
